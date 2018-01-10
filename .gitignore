@@ -1,6 +1,6 @@
 .idea
 target
 spark-warehouse
-data/*
+docker_jar/data
 project/target
 docker_jar/lib

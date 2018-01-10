@@ -6,7 +6,7 @@
 
 package es.jgc.fbid
 
-import org.apache.spark.SparkConf
+import org.apache.hadoop.conf.Configuration
 
 import scala.collection.Map
 import scala.collection.mutable.ArrayBuffer
@@ -27,18 +27,20 @@ object RunRecommender {
     val spark = SparkSession.builder().config("spark.master", "spark://"+sparkAddress).getOrCreate()
     println("Connected to "+sparkAddress)
 
+    val hadoopConfig: Configuration = spark.sparkContext.hadoopConfiguration
+    hadoopConfig.set("fs.hdfs.impl", classOf[org.apache.hadoop.hdfs.DistributedFileSystem].getName)
+    hadoopConfig.set("fs.file.impl", classOf[org.apache.hadoop.fs.LocalFileSystem].getName)
+
     // Optional, but may help avoid errors due to long lineage
-//    spark.sparkContext.setCheckpointDir("/Users/jgc/dev/muirst/fbid/fbid2017/spark-warehouse")
-    spark.sparkContext.setCheckpointDir("hdfs://"+hdfsAddress+"/tmp/")
-    println("Checkpoint set "+hdfsAddress)
+//    spark.sparkContext.setCheckpointDir("hdfs://"+hdfsAddress+"/tmp/")
+//    println("Checkpoint set "+hdfsAddress)
 
-    //    val base = "hdfs://127.0.0.1:9000/user/ds/"
-    val base = "/Users/jgc/dev/muirst/fbid/fbid2017/data/"
-    println("Base data dir "+hdfsAddress)
+//    val base = "hdfs://"+hdfsAddress+"/user/ds/"
+//    val base = "/Users/jgc/dev/muirst/fbid/fbid2017/docker_jar/data/"
 
-    val rawUserArtistData = spark.read.textFile(base + "user_artist_data_1000.txt")
-    val rawArtistData = spark.read.textFile(base + "artist_data.txt")
-    val rawArtistAlias = spark.read.textFile(base + "artist_alias.txt")
+    val rawUserArtistData = spark.read.textFile("/home/data/user_artist_data_1000.txt")
+    val rawArtistData = spark.read.textFile("/home/data/artist_data.txt")
+    val rawArtistAlias = spark.read.textFile("/home/data/artist_alias.txt")
 
     val runRecommender = new RunRecommender(spark)
     runRecommender.preparation(rawUserArtistData, rawArtistData, rawArtistAlias)
@@ -46,6 +48,27 @@ object RunRecommender {
     runRecommender.evaluate(rawUserArtistData, rawArtistAlias)
     runRecommender.recommend(rawUserArtistData, rawArtistData, rawArtistAlias)
   }
+
+//  LOCAL RUN
+//  def main(args: Array[String]): Unit = {
+//    val spark = SparkSession.builder().config("spark.master", "local[4]").getOrCreate()
+//
+//    // Optional, but may help avoid errors due to long lineage
+//    spark.sparkContext.setCheckpointDir("/Users/jgc/dev/muirst/fbid/fbid2017/spark_warehouse/")
+//
+//    val base = "/Users/jgc/dev/muirst/fbid/fbid2017/docker_jar/data/"
+//    println("Base data dir "+base)
+//
+//    val rawUserArtistData = spark.read.textFile(base + "user_artist_data_1000.txt")
+//    val rawArtistData = spark.read.textFile(base + "artist_data.txt")
+//    val rawArtistAlias = spark.read.textFile(base + "artist_alias.txt")
+//
+//    val runRecommender = new RunRecommender(spark)
+//    runRecommender.preparation(rawUserArtistData, rawArtistData, rawArtistAlias)
+//    runRecommender.model(rawUserArtistData, rawArtistData, rawArtistAlias)
+//    runRecommender.evaluate(rawUserArtistData, rawArtistAlias)
+//    runRecommender.recommend(rawUserArtistData, rawArtistData, rawArtistAlias)
+//  }
 
 }
 

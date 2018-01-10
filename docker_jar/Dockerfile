@@ -5,6 +5,13 @@ COPY lib/fbid2017-assembly-0.1.jar /home/fbid2017-assembly-0.1.jar
 COPY lib/jdk-8u151-linux-x64.tar.gz /usr/local/jdk-8u151-linux-x64.tar.gz
 COPY ./docker-entrypoint.sh /
 
+RUN mkdir /home/data
+RUN mkdir /home/spark-warehouse
+
+COPY data/artist_alias.txt /home/data/artist_alias.txt
+COPY data/artist_data.txt /home/data/artist_data.txt
+COPY data/user_artist_data_1000.txt /home/data/user_artist_data_1000.txt
+
 RUN tar zfx /usr/local/jdk-8u151-linux-x64.tar.gz  -C /usr/local/ \
     && rm -rf $JAVA_HOME/man \
     && rm /usr/local/jdk-8u151-linux-x64.tar.gz
