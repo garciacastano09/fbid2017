@@ -1,0 +1,2 @@
+ERROR server.TransportRequestHandler: Error while invoking RpcHandler#receive() for one-way message.
+java.io.InvalidClassException: scala.collection.immutable.List$SerializationProxy; local class incompatible: stream classdesc serialVersionUID = -7905219378619747021, local class serialVersionUID = 1

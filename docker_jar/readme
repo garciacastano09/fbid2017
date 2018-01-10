@@ -1,0 +1,2 @@
+docker build . --tag recommender
+docker run -e SPARK_MASTER_HOST='1234' -e=SPARK_MASTER_IP='4321' -e HDFS_NAMENODE_HOST='7890' -e HDFS_NAMENODE_PORT='0987' recommender

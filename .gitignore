@@ -1,0 +1,6 @@
+.idea
+target
+spark-warehouse
+data/*
+project/target
+docker_jar/lib
