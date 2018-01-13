@@ -18,4 +18,4 @@ cd docker_jar
 echo '*************************'
 echo 'Building Docker image...'
 echo '*************************'
-docker build . --tag=recommender
+docker build . --tag=recommenderd

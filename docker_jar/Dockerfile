@@ -5,8 +5,8 @@ COPY lib/fbid2017-assembly-0.1.jar /home/fbid2017-assembly-0.1.jar
 COPY lib/jdk-8u151-linux-x64.tar.gz /usr/local/jdk-8u151-linux-x64.tar.gz
 COPY ./docker-entrypoint.sh /
 
-RUN mkdir /home/data
-RUN mkdir /home/spark-warehouse
+#RUN mkdir /home/data
+RUN mkdir /home/spark_warehouse
 
 COPY data/artist_alias.txt /home/data/artist_alias.txt
 COPY data/artist_data.txt /home/data/artist_data.txt
